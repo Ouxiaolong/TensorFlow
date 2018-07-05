@@ -31,9 +31,9 @@ ys = tf.placeholder(tf.float32, [None, 1])
 
 #【3】定义神经层：隐藏层和预测层
 #添加隐藏层，输入值是 xs，在隐藏层有 10 个神经元  
-l1 = add_layer(xs, 1, 10, activation_function=tf.nn.relu)
+l1 = add_layer(xs, 1, 10, activation_function=tf.nn.tanh)
 #添加输出层，输入值是隐藏层 l1，在预测层输出 1 个结果
-prediction = add_layer(l1, 10, 1, activation_function=None)
+prediction = add_layer(l1, 10, 1, activation_function=tf.nn.tanh)
 
 #【4】定义损失函数，误差的均方差
 loss = tf.reduce_mean(tf.reduce_sum(tf.square(ys - prediction),
@@ -49,24 +49,15 @@ sess = tf.Session()
 #上面定义的都没有运算，直到 sess.run 才会开始运算
 sess.run(init)
 
-# 打印数据
-fig = plt.figure()#生成图片框
-ax = fig.add_subplot(1,1,1)
-ax.scatter(x_data, y_data)
-plt.ion()#连续输出数据
-#plt.show()#输出数据
 
 #【8】训练模型的到结果，迭代，反复执行上面的最小化损失函数这一操作，拟合数据
-for i in range(1000):
+for _ in range(2000):
     #train_step 和 loss 都是由 placeholder 定义的运算，所以这里要用 feed 传入参数
     sess.run(train_step, feed_dict={xs: x_data, ys: y_data})
-    if i % 50 == 0:
-        # to visualize the result and improvement
-        try:
-            ax.lines.remove(lines[0])
-        except Exception:
-            pass
+    
 prediction_value = sess.run(prediction, feed_dict={xs: x_data})
-# plot the prediction
-lines = ax.plot(x_data, prediction_value, 'r-', lw=5)
-plt.pause(0.1)
+#画图
+plt.figure()
+plt.scatter(x_data,y_data)
+plt.plot(x_data,prediction_value,'r-',lw=5)
+plt.show()

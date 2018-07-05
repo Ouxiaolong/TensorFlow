@@ -49,6 +49,7 @@ with tf.name_scope('train'):
 
 #【6】初始化数据，tf 的必备步骤，主要声明了变量，就必须初始化才能用
 init = tf.initialize_all_variables()
+#init = tf.global_variables_initialize()
 
 #【7】创建Session会话。启动图
 sess = tf.Session()
